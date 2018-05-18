@@ -20,6 +20,7 @@ class PrayerTime internal constructor(coordinates: Coordinate, date: Date, calcu
     val asr: Date?
     val maghrib: Date?
     val isha: Date?
+    val imsak: Date?
 
     /**
      * Calculate PrayerTimes
@@ -139,6 +140,7 @@ class PrayerTime internal constructor(coordinates: Coordinate, date: Date, calcu
             this.asr = null
             this.maghrib = null
             this.isha = null
+            this.imsak = null
         } else {
             // Assign final times to public struct members with all offsets
             this.fajr = tempFajr?.add(MINUTE, calculationMethod.params.offset.fajr)
@@ -147,6 +149,7 @@ class PrayerTime internal constructor(coordinates: Coordinate, date: Date, calcu
             this.asr = tempAsr.add(MINUTE, calculationMethod.params.offset.asr)
             this.maghrib = tempMaghrib?.add(MINUTE, calculationMethod.params.offset.maghrib)
             this.isha = tempIsha?.add(MINUTE, calculationMethod.params.offset.isha)
+            this.imsak = Date(fajr!!.time - TimeUnit.MINUTES.toMillis(10))
         }
     }
 
@@ -184,7 +187,7 @@ class PrayerTime internal constructor(coordinates: Coordinate, date: Date, calcu
             ASR -> this.asr
             MAGHRIB -> this.maghrib
             ISHA -> this.isha
-            IMSAK -> Date(this.fajr!!.time - TimeUnit.MINUTES.toMillis(10))
+            IMSAK -> this.imsak
         }
     }
 
