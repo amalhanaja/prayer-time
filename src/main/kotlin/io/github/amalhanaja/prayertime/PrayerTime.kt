@@ -9,6 +9,7 @@ import io.github.amalhanaja.prayertime.extensions.resolveTime
 import io.github.amalhanaja.prayertime.utils.SolarTime
 import java.util.*
 import java.util.Calendar.*
+import java.util.concurrent.TimeUnit
 import kotlin.math.*
 
 
@@ -158,14 +159,14 @@ class PrayerTime internal constructor(coordinates: Coordinate, date: Date, calcu
             this.dhuhr!!.time - millis <= 0 -> DHUHR
             this.sunrise!!.time - millis <= 0 -> SUNRISE
             this.fajr!!.time - millis <= 0 -> FAJR
-            else -> Prayer.NONE
+            else -> IMSAK
         }
     }
 
     fun nextPrayer(date: Date = Date()): Prayer {
         val millis = date.time
         return when {
-            this.isha!!.time - millis <= 0 -> Prayer.NONE
+            this.isha!!.time - millis <= 0 -> IMSAK
             this.maghrib!!.time - millis <= 0 -> ISHA
             this.asr!!.time - millis <= 0 -> MAGHRIB
             this.dhuhr!!.time - millis <= 0 -> ASR
@@ -183,8 +184,7 @@ class PrayerTime internal constructor(coordinates: Coordinate, date: Date, calcu
             ASR -> this.asr
             MAGHRIB -> this.maghrib
             ISHA -> this.isha
-            IMSAK -> null
-            else -> null
+            IMSAK -> Date(this.fajr!!.time - TimeUnit.MINUTES.toMillis(10))
         }
     }
 
